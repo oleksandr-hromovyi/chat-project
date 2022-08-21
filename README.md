@@ -1,15 +1,35 @@
-# Private Chat App With React and Firebase version 9
+# Chat App With React and Firebase (v. 9)
 
-This project is built with React and latest Firebase SDK version 9.
+This project is built with React and Firebase version 9.
+
+## About project
+
+The project allows you chat with other people in real time.
+For convenience was created authentication and authorization (including through the Google).
+
+Сhat already has a static list of contacts, some of them are bots (Barrera, Velazquez, Josefina and Alice Freeman). You can chat with them and recieve automatic response. For the responces was used Chuck Norris API, which generated random jokes about Chuck Norris.
+
+If you sign in through the Google and you do it for the first time generated some messages in conversations with bots.
+If you creating new user through standard form you get an empty conversations with all users.
+
+Chat has filter by contacts.
+After refreshing of the page messages gets from firebase automatically.
+
+Link of the Chuck Norris API: https://api.chucknorris.io/
+
+## TODO
+- improving of filtering (inc. message search);
+- lift up a contact if there is a new incoming message;
+- add tablet and mobile version (for this moment min allowable width - 780px)
 
 ## Run the app
+In the project directory, you can run:
 
-- Clone this repo
-- Run **npm install**
-- Create **.env** file at root level of project and add REACT_APP_API_KEY, REACT_APP_AUTH_DOMAIN, REACT_APP_DATABASE_URL, REACT_APP_PROJECT_ID, REACT_APP_STORAGE_BUCKET, REACT_APP_MESSAGING_SENDER_ID, REACT_APP_APP_ID
-- Value of REACT_APP_DATABASE_URL will be https://YOUR-FIREBASE-PROJECT-NAME.firebaseio.com simply replace YOUR-FIREBASE-PROJECT-NAME with your project name
-- Run **npm start**
+**npm install**
 
-[YouTube video tutorial](https://youtu.be/fdcruaIiQxc)
+This command installs a package and any packages that it depends on.
 
-[Text based and video tutorials](https://farhanfarooq.com/tutorials)
+**npm start**
+
+Runs the app in the development mode. Open http://localhost:3000 to view it in your browser.
+
