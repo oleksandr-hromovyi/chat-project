@@ -55,7 +55,7 @@ const Login = () => {
   });
 }
 
- 
+const redirectToRegister = () => history.replace("/register")
   const handleSubmit = async (e) => {
     e.preventDefault();
     setData({ ...data, error: null, loading: true });
@@ -108,7 +108,7 @@ const Login = () => {
           </button>
         </div>
         <div className="input_container-span">
-          <span >Don't have account yet? Click <a href="/register">here</a>.</span>
+          <span >Don't have account yet? Click <a onClick={redirectToRegister} className="input_container_link">here</a>.</span>
         
         <span>Connect with social media:</span>
         </div>

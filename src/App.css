@@ -489,3 +489,6 @@ section .form {
   color: #56B0D9;
 }
 
+.input_container_link:hover {
+cursor: pointer;
+}
