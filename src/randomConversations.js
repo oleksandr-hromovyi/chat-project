@@ -53,7 +53,7 @@ let generatorMessages= (senderId) =>{
            })
     }
 
-    let generatorMessages = ids.map((item) =>{
+    let generatorMessages = ids.forEach((item) =>{
         return generateMessages(item.reciever, item.id)
     })     
     

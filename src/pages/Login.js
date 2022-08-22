@@ -37,7 +37,7 @@ const Login = () => {
     const provider = new GoogleAuthProvider();
      signInWithPopup(auth, provider).then((result) => {
      const user = result.user;
-     console.log(user)
+   
      user.metadata.lastLoginAt - user.metadata.createdAt < 10 && generatorMessages(user.uid)
 
      setDoc(doc(db, "users", user.uid), {

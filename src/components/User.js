@@ -7,7 +7,7 @@ import Moment from "react-moment";
 const User = ({ sender, user, selectUser, chat }) => {
   const receiver = user?.uid;
   const [data, setData] = useState("");
- 
+
   useEffect(() => {
     const id = sender > receiver ? `${sender + receiver}` : `${receiver + sender}`;
     let unsub = onSnapshot(doc(db, "lastMsg", id), (doc) => {

@@ -14,24 +14,23 @@ let getData= async() => {
 return data;
 }
  
- 
-  async function getAnswer(receiver, sender, id){
+ async function getAnswer(receiver, sender, id){
    
     let ChuckJoke = await getData();
-      try {
-        await addDoc(collection(db, "messages", id, "chat"), {
+
+       try {
+           await addDoc(collection(db, "messages", id, "chat"), {
+            text: ChuckJoke,
             from: receiver,
             to: sender,
-            text: ChuckJoke,
-            createdAt: Timestamp.fromDate(new Date())
-
-       
+            createdAt: new Date()
         })
-        await setDoc(doc(db, "lastMsg", id), {
+
+          await setDoc(doc(db, "lastMsg", id), {
           text: ChuckJoke,
           from: receiver,
           to: sender,
-          createdAt: Timestamp.fromDate(new Date()),
+          createdAt: new Date(),
           unread: true,
         });
     } catch (error) {

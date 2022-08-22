@@ -13,7 +13,7 @@ const MessageForm = ({ handleSubmit, text, setText }) => {
                 value={text}
                 onChange={(e) => setText(e.target.value)}
                 ></input>
-             <button type="submit" className='sendBtn'><img src={send} height="25" width="25"/></button>
+             <button type="submit" className='sendBtn'><img src={send} alt="send_button" height="25" width="25"/></button>
              </div>    
         </form>
   
