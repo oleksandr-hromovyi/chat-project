@@ -6,18 +6,18 @@ import {
   where,
   onSnapshot,
   addDoc,
-  Timestamp,
-  orderBy,
   setDoc,
   doc,
   getDoc,
   updateDoc,
+  serverTimestamp,
 } from "firebase/firestore";
 import User from "../components/User";
 import MessageForm from "../components/MessageForm";
 import Navbar from "../components/Navbar";
-import { getAnswer } from "../answerBot";
+import { getAnswer } from "../functions/answerBot";
 import MessagesBlock from "../components/MessagesBlock";
+
 
 const Home = () => {
   const [users, setUsers] = useState([]);
@@ -25,32 +25,42 @@ const Home = () => {
   const [text, setText] = useState("");
   const [msgs, setMsgs] = useState([]);
   const [search, setSearch] = useState("");
+  const [time, setTime]= useState({});
 
   const sender = auth.currentUser.uid;
-  
+
   useEffect(() => {
+
     const usersRef = collection(db, "users");
     // create query object
     const q = query(usersRef, where("uid", "not-in", [sender]));
     // execute query
     const unsub = onSnapshot(q, (querySnapshot) => {
       let users = [];
-      querySnapshot.forEach((doc) => {
-        users.push(doc.data());
-      });
-      setUsers(users);
-   });
-    return () => unsub();
-  }, [sender]);
+   
+     querySnapshot.forEach((doc) => {
+        users.push({...doc.data(), time: time[doc.data().uid] || 0 });
+     });
+
+     let filteredResult = users.sort(function(a,b){
+          return b.time - a.time;
+      })
+         
+     setUsers(filteredResult);
+  });
+
+  return ()=> unsub();
+
+  }, [time, sender]);
+
+
 
   const selectUser = async (user) => {
     setSearch('');
     setChat(user);
     const receiver = user.uid;
     const id = sender > receiver ? `${sender + receiver}` : `${receiver + sender}`;
-    const msgsRef = collection(db, "messages", id, "chat");
-    const q = query(msgsRef, orderBy("createdAt", "asc"));
-   
+       
     // get last message b/w logged in user and selected user
     const docSnap = await getDoc(doc(db, "lastMsg", id));
     // if last message exists and message is from selected user
@@ -68,34 +78,31 @@ const Home = () => {
     const receiver = chat.uid;
     const status = chat.status;
     const id = sender > receiver ? `${sender + receiver}` : `${receiver + sender}`;
- 
+
     if (text.length > 0) {
     await addDoc(collection(db, "messages", id, "chat"), {
       text,
       from: sender,
       to: receiver,
-      createdAt: Timestamp.fromDate(new Date()),
+      createdAt: serverTimestamp(),
    
     });
     await setDoc(doc(db, "lastMsg", id), {
       text,
       from: sender,
       to: receiver,
-      createdAt: Timestamp.fromDate(new Date()),
+      createdAt: serverTimestamp(),
       unread: true,
-    });
+      
+    }
+   );
   }
-
   status === "bot" && setTimeout(()=>getAnswer(receiver, sender,id), 5000);
-
 }
-
-
 
 let filteredUsers = users.filter((user)=>{
   return user.name.toLowerCase().indexOf(search.toLowerCase())>-1;
 })
-
 
   return (
     <>
@@ -112,27 +119,29 @@ let filteredUsers = users.filter((user)=>{
           ></input>
             <div className="chats">Chats</div>
     </div>
-  
-    {search ? (filteredUsers.map((user) => (
-        <User
-          key={user.uid}
-          user={user}
-          selectUser={selectUser}
-          sender={sender}
-          chat={chat}
-        />
-    ))) : (users.map((user) => (
-        <User
-          key={user.uid}
-          user={user}
-          selectUser={selectUser} 
-          sender={sender}
-          chat={chat}
-         
-        />
-      ))
-
-    )}
+         {!search ? (users.map((user) => (
+          <User
+              key={user.uid}
+              user={user}
+              selectUser={selectUser} 
+              sender={sender}
+              chat={chat}
+              setTime={setTime}
+              time={time}
+            />)))
+            :
+            (filteredUsers.map((user) => (
+              <User
+                key={user.uid}
+                user={user}
+                selectUser={selectUser}
+                sender={sender}
+                chat={chat}
+                setTime={setTime}
+                time={time}
+            
+              />
+          )))}
     </div>
       <div className="messages_container">
         {chat ? (

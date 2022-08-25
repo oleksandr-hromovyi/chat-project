@@ -5,16 +5,18 @@ import {
     query,
     onSnapshot,
     orderBy,
+    limit
   } from "firebase/firestore";
-  import { db, auth } from "../firebase";
+  import { db } from "../firebase";
 const MessagesBlock = ({msgs, sender, chat, setMsgs}) => {
+    
     useEffect(()=>{
         const receiver = chat.uid;
         const id = sender > receiver ? `${sender + receiver}` : `${receiver + sender}`;
         const msgsRef = collection(db, "messages", id, "chat");
         const q = query(msgsRef, orderBy("createdAt", "asc"));
        
-       let unsub = onSnapshot(q, (querySnapshot) => {
+        let unsub = onSnapshot(q, (querySnapshot) => {
           let msgs = [];
           querySnapshot.forEach((doc) => {
             msgs.push(doc.data());
@@ -25,17 +27,16 @@ const MessagesBlock = ({msgs, sender, chat, setMsgs}) => {
         
      return ()=> unsub();
     },[chat])
+
   return (
-
-
     <>
     {msgs.length
         ? msgs.map((msg, i) => (
-            <Message key={i} msg={msg} sender={sender} avatar={chat.avatar} />
+            <Message key={i} msg={msg} time={msg.createdAt} sender={sender} avatar={chat.avatar} />
           ))
         : null}
         </>
   )
 }
 
-export default MessagesBlock
+export default MessagesBlock;

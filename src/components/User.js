@@ -4,17 +4,35 @@ import { onSnapshot, doc } from "firebase/firestore";
 import { db } from "../firebase";
 import Moment from "react-moment";
 
-const User = ({ sender, user, selectUser, chat }) => {
+
+const User = ({ sender, user, selectUser, chat, setTime, time }) => {
+
   const receiver = user?.uid;
   const [data, setData] = useState("");
+  const [timer, setTimer] = useState("");
+
+
+  useEffect(()=>{
+ data && setTimer(data?.createdAt?.seconds)
+
+  },[data])
+
 
   useEffect(() => {
     const id = sender > receiver ? `${sender + receiver}` : `${receiver + sender}`;
     let unsub = onSnapshot(doc(db, "lastMsg", id), (doc) => {
       setData(doc.data());
     });
-    return () => unsub();
-  }, []);
+    
+    return () => unsub() ;
+  }, [sender, receiver]);
+ 
+  useEffect(()=>{
+    
+      setTime({...time, [receiver]: timer })
+    
+  }, [timer])
+ 
 
   return (
     <>
@@ -28,7 +46,7 @@ const User = ({ sender, user, selectUser, chat }) => {
           <div className="box"><div className="innerBox" >
             <h4>{user.name}</h4>
             {data && (
-              <Moment format="MMM D, YYYY">{data.createdAt.toDate()}</Moment>)}
+              <Moment format="MMM D, YYYY">{data?.createdAt?.toDate()}</Moment>)}
           </div>
           <div className="innerBox second">
              {data ? (

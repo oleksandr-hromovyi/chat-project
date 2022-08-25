@@ -19,8 +19,9 @@ Link of the Chuck Norris API: https://api.chucknorris.io/
 
 ## TODO
 - improving of filtering (inc. message search);
-- lift up a contact if there is a new incoming message;
-- add tablet and mobile version (for this moment min allowable width - 780px)
+- solve the issue of time zones, using non-local time (Network Time Protocol);
+- improving sorting contacts by last send message (work only on local server and with some bugs);
+- add tablet and mobile version (for this moment min allowable width - 780px);
 
 ## Run the app
 In the project directory, you can run:

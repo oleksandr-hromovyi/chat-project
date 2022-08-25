@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase";
-import { setDoc, doc, Timestamp } from "firebase/firestore";
-import { useHistory } from "react-router-dom";
+import { setDoc, doc, serverTimestamp } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
   const [data, setData] = useState({
@@ -13,7 +13,7 @@ const Register = () => {
     loading: false,
   });
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { name, email, password, error, loading } = data;
 
@@ -37,7 +37,7 @@ const Register = () => {
         uid: result.user.uid,
         name,
         email,
-        createdAt: Timestamp.fromDate(new Date()),
+        createdAt: serverTimestamp(),
         isOnline: true,
       });
       setData({
@@ -47,7 +47,7 @@ const Register = () => {
         error: null,
         loading: false,
       });
-      history.replace("/");
+      navigate("/");
     } catch (err) {
       setData({ ...data, error: err.message, loading: false });
     }

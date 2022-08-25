@@ -3,14 +3,14 @@ import { auth, db } from "../firebase";
 import { signOut } from "firebase/auth";
 import { updateDoc, doc } from "firebase/firestore";
 import { AuthContext } from "../context/auth";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import avatarIcon from "../img/avatar.jpg";
 import Profile from "../pages/Profile";
 import logOut from '../img/logOut.png'
 
 const Navbar = ({chat}) => {
  
-  const history = useHistory();
+  const navigate = useNavigate();
   const { user } = useContext(AuthContext);
 
   const handleSignout = async () => {
@@ -18,7 +18,7 @@ const Navbar = ({chat}) => {
       isOnline: false,
     });
     await signOut(auth);
-    history.replace("/login");
+    navigate("/login");
   };
 
   return (

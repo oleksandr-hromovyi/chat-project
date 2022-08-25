@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "../firebase";
 import { updateDoc, doc, setDoc } from "firebase/firestore";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { GoogleButton } from 'react-google-button';
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { generatorMessages } from "../randomConversations";
+import { generatorMessages } from "../functions/randomConversations";
 
 const Login = () => {
 
@@ -16,7 +16,7 @@ const Login = () => {
     loading: false,
   });
 
-  const history = useHistory();
+  const navigate = useNavigate();
 
   const { email, password, error, loading } = data;
 
@@ -49,13 +49,13 @@ const Login = () => {
      })
 
 
-    history.replace("/")
+    navigate("/")
   }).catch((error) =>{
     console.log(error)
   });
 }
 
-const redirectToRegister = () => history.replace("/register")
+const redirectToRegister = () => navigate("/register")
   const handleSubmit = async (e) => {
     e.preventDefault();
     setData({ ...data, error: null, loading: true });
@@ -74,7 +74,7 @@ const redirectToRegister = () => history.replace("/register")
         error: null,
         loading: false,
       });
-      history.replace("/");
+      navigate("/");
     } catch (err) {
       setData({ ...data, error: err.message, loading: false });
     }

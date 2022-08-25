@@ -1,11 +1,11 @@
 import {
     collection,
     addDoc,
-    Timestamp,
     setDoc,
     doc,
+    serverTimestamp
   } from "firebase/firestore";
-import { db } from "./firebase";
+import { db } from "../firebase";
 
 let getData= async() => {
     const promise = await fetch('https://api.chucknorris.io/jokes/random')
@@ -23,14 +23,14 @@ return data;
             text: ChuckJoke,
             from: receiver,
             to: sender,
-            createdAt: new Date()
+            createdAt: serverTimestamp(),
         })
 
           await setDoc(doc(db, "lastMsg", id), {
           text: ChuckJoke,
           from: receiver,
           to: sender,
-          createdAt: new Date(),
+          createdAt: serverTimestamp(),
           unread: true,
         });
     } catch (error) {

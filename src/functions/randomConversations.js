@@ -1,5 +1,5 @@
 import { loremIpsum } from "lorem-ipsum";
-import { auth, db } from "./firebase";
+import { auth, db } from "../firebase";
 import {addDoc, collection, setDoc, doc} from "firebase/firestore";
 
 let recievers = [
