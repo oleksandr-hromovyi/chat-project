@@ -27,7 +27,7 @@ nav {
   align-items: center;
   justify-content: space-between;
   background: var(--color-6);
-}
+} 
 
 nav a {
   color: var(--color-2);
@@ -492,3 +492,60 @@ section .form {
 .input_container_link:hover {
 cursor: pointer;
 }
+
+@media screen and (max-width:720px) {
+  .sender_section, .users_container{
+    min-width: 300px;
+  }
+  .text_container h3{
+    font-size: 16px;
+  }
+   .text_container p{
+    font-size: 12px;
+  }
+  .innerBox h4 {
+    font-size: 13px;
+  }
+  .innerBox time {
+    flex-basis: 85px;
+    font-size: 12px;
+    text-align: right;
+  }
+  .truncate {
+    font-size: 12px;
+    width: 120px;
+  }
+  .recipient_section h3 {
+    font-size: 16px;
+  }
+  .message_wrapper p{
+    font-size: 14px;
+  }
+  .btn_blockLogOut{
+    left: 90%;
+  }
+  @media screen and (max-width:620px){
+    .recipient_section, .messages_container{
+      display: none;    
+    }
+    .users_container{
+      width:100%;
+    }
+    .btn_blockLogOut{
+      position: absolute;
+    }
+    .chats {
+      padding: 20px 10px;
+    }
+    nav {
+      flex-direction: column;
+    }
+    .truncate {
+      width: 80%;
+    }
+
+
+}}
+
+
+ 

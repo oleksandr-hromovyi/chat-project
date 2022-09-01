@@ -20,39 +20,32 @@ import MessagesBlock from "../components/MessagesBlock";
 
 
 const Home = () => {
+
   const [users, setUsers] = useState([]);
   const [chat, setChat] = useState("");
   const [text, setText] = useState("");
   const [msgs, setMsgs] = useState([]);
   const [search, setSearch] = useState("");
-  const [time, setTime]= useState({});
 
   const sender = auth.currentUser.uid;
 
   useEffect(() => {
-
     const usersRef = collection(db, "users");
-    // create query object
     const q = query(usersRef, where("uid", "not-in", [sender]));
-    // execute query
     const unsub = onSnapshot(q, (querySnapshot) => {
       let users = [];
-   
-     querySnapshot.forEach((doc) => {
-        users.push({...doc.data(), time: time[doc.data().uid] || 0 });
+      
+        querySnapshot.forEach((doc) => {
+          let item = doc.data();
+
+          users.push({...item});
      });
+     setUsers(users);
+       
+});
+    return ()=> unsub();
 
-     let filteredResult = users.sort(function(a,b){
-          return b.time - a.time;
-      })
-         
-     setUsers(filteredResult);
-  });
-
-  return ()=> unsub();
-
-  }, [time, sender]);
-
+  }, [sender]);
 
 
   const selectUser = async (user) => {
@@ -60,7 +53,7 @@ const Home = () => {
     setChat(user);
     const receiver = user.uid;
     const id = sender > receiver ? `${sender + receiver}` : `${receiver + sender}`;
-       
+
     // get last message b/w logged in user and selected user
     const docSnap = await getDoc(doc(db, "lastMsg", id));
     // if last message exists and message is from selected user
@@ -68,8 +61,9 @@ const Home = () => {
       // update last message doc, set unread to false
       await updateDoc(doc(db, "lastMsg", id), { unread: false });
     }
- 
+
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -100,10 +94,6 @@ const Home = () => {
   status === "bot" && setTimeout(()=>getAnswer(receiver, sender,id), 5000);
 }
 
-let filteredUsers = users.filter((user)=>{
-  return user.name.toLowerCase().indexOf(search.toLowerCase())>-1;
-})
-
   return (
     <>
     <Navbar chat={chat} />
@@ -126,20 +116,15 @@ let filteredUsers = users.filter((user)=>{
               selectUser={selectUser} 
               sender={sender}
               chat={chat}
-              setTime={setTime}
-              time={time}
             />)))
             :
-            (filteredUsers.map((user) => (
+            (users.map((user) => (
               <User
                 key={user.uid}
                 user={user}
                 selectUser={selectUser}
                 sender={sender}
                 chat={chat}
-                setTime={setTime}
-                time={time}
-            
               />
           )))}
     </div>

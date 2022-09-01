@@ -1,37 +1,30 @@
 import React, { useEffect, useState } from "react";
 import avatarIcon from "../img/avatar.jpg";
-import { onSnapshot, doc } from "firebase/firestore";
+import { onSnapshot, doc, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import Moment from "react-moment";
 
 
-const User = ({ sender, user, selectUser, chat, setTime, time }) => {
+
+const User = ({ sender, user, selectUser, chat }) => {
 
   const receiver = user?.uid;
   const [data, setData] = useState("");
-  const [timer, setTimer] = useState("");
 
-
-  useEffect(()=>{
- data && setTimer(data?.createdAt?.seconds)
-
-  },[data])
-
+  
 
   useEffect(() => {
-    const id = sender > receiver ? `${sender + receiver}` : `${receiver + sender}`;
-    let unsub = onSnapshot(doc(db, "lastMsg", id), (doc) => {
-      setData(doc.data());
-    });
+      
+       const id = sender > receiver ? `${sender + receiver}` : `${receiver + sender}`;
+       let unsub = onSnapshot(doc(db, "lastMsg", id), (doc) => {
+         setData(doc.data());
+       });
+       
+       return () => unsub() ;
+     }, [receiver]);
     
-    return () => unsub() ;
-  }, [sender, receiver]);
- 
-  useEffect(()=>{
-    
-      setTime({...time, [receiver]: timer })
-    
-  }, [timer])
+
+
  
 
   return (

@@ -70,3 +70,11 @@ table {
 a {
 	text-decoration: none;
 }
+
+@media (min-width: 620px) and (max-width: 720px) {
+	.sender-section{
+	  display: none
+	}
+   
+   
+  }
